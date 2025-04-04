@@ -1,0 +1,123 @@
+{
+    "projects": [
+      {
+        "id": "mmf-calculator",
+        "title": "CNJM Money Market Fund Calculator",
+        "description": "A financial tool for calculating money market fund returns.",
+        "detailedDescription": "Developed an intuitive Svelte-based calculator for estimating money market fund earnings. The application provides real-time calculations and visualizes investment growth over time.",
+        "technologies": ["Svelte"],
+        "features": [
+          "Instant investment return calculations",
+          "User-friendly interface",
+          "Dynamic chart visualization"
+        ],
+        "screenshots": [
+          "/screenshots/mmf1.png",
+          "/screenshots/mmf2.png",
+          "/screenshots/mmf3.png"
+        ],
+        "link": "https://cnjm-money-market-fund-calculator.vercel.app/",
+        "role": "Frontend Developer",
+        "duration": "Ongoing"
+      },
+      {
+        "id": "corrupt-zone",
+        "title": "Corrupt Zone",
+        "description": "A Flask-based web app for tracking corruption cases and incidents.",
+        "detailedDescription": "Created a robust corruption tracking platform using Flask. The application allows users to report and browse corruption cases while ensuring anonymity and security.",
+        "technologies": ["Flask"],
+        "features": [
+          "Secure case submission",
+          "Anonymous reporting",
+          "Search and filter corruption cases"
+        ],
+        "screenshots": [
+          "/screenshots/corrupt1.png",
+          "/screenshots/corrupt2.png",
+          "/screenshots/corrupt3.png"
+        ],
+        "link": "https://corrupt-zone.vercel.app/",
+        "role": "Full-stack Developer",
+        "duration": "Ongoing"
+      },
+      {
+        "id": "luxury-footwear",
+        "title": "Luxury Footwear E-commerce Platform",
+        "description": "Scalable e-commerce solution for high-end footwear.",
+        "detailedDescription": "Architected a high-performance e-commerce platform specializing in luxury footwear. Implemented a custom CMS for product management and integrated secure payment gateways.",
+        "technologies": ["CherryPy", "MongoDB", "Vue.js", "Vite"],
+        "features": [
+          "Real-time inventory management",
+          "3D product visualization",
+          "AI-powered recommendations",
+          "Multi-currency support"
+        ],
+        "screenshots": [
+          "/screenshots/ecom1.png",
+          "/screenshots/ecom2.png",
+          "/screenshots/ecom3.png"
+        ],
+        "link": "#",
+        "role": "Lead Developer & Architect",
+        "duration": "8 months"
+      },
+      {
+        "id": "house-help-app",
+        "title": "House Help App (In Progress)",
+        "description": "On-demand domestic service platform.",
+        "detailedDescription": "Building a mobile-first platform connecting households with verified domestic helpers. Features include real-time tracking, background checks, and automated scheduling.",
+        "technologies": ["Go", "Svelte", "Pocketbase", "REST API"],
+        "features": [
+          "Geolocation-based matching",
+          "Secure in-app payments",
+          "Rating system",
+          "Instant booking system"
+        ],
+        "screenshots": [
+          "/screenshots/househelp1.png",
+          "/screenshots/househelp2.png"
+        ],
+        "link": "#",
+        "role": "Full-stack Developer",
+        "duration": "3 months (ongoing)"
+      },
+      {
+        "id": "cnjm-constructions",
+        "title": "CNJM Constructions",
+        "description": "A Svelte-powered website for a construction company.",
+        "detailedDescription": "Developed a sleek and modern website for a construction company using Svelte. The platform highlights completed projects, services, and client testimonials.",
+        "technologies": ["Svelte"],
+        "features": [
+          "Showcasing completed projects",
+          "Interactive service catalog",
+          "Client testimonials section"
+        ],
+        "screenshots": [
+          "/screenshots/const1.png",
+          "/screenshots/const2.png"
+        ],
+        "link": "https://cnjm-constructions.vercel.app/",
+        "role": "Frontend Developer",
+        "duration": "Ongoing"
+      },
+      {
+        "id": "cnjm-photography",
+        "title": "CNJM Photography",
+        "description": "A photography portfolio website built with Svelte.",
+        "detailedDescription": "Designed and developed a visually stunning portfolio website for photographers. The platform allows for high-resolution image galleries and an elegant UI to enhance visual storytelling.",
+        "technologies": ["Svelte"],
+        "features": [
+          "High-resolution image galleries",
+          "Responsive and mobile-friendly UI",
+          "Portfolio showcase"
+        ],
+        "screenshots": [
+          "/screenshots/photo1.png",
+          "/screenshots/photo2.png"
+        ],
+        "link": "https://cnjm-photography.vercel.app/",
+        "role": "Frontend Developer",
+        "duration": "Ongoing"
+      }
+    ]
+  }

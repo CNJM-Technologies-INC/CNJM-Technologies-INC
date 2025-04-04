@@ -1,0 +1,28 @@
+{
+    "services": [
+      {
+        "id": "custom-software",
+        "title": "Custom Software Development",
+        "description": "Tailored solutions designed to address your specific business needs and challenges.",
+        "icon": "code"
+      },
+      {
+        "id": "process-automation",
+        "title": "Process Automation",
+        "description": "Streamline your workflows and increase efficiency with our intelligent automation solutions.",
+        "icon": "gears"
+      },
+      {
+        "id": "data-analytics",
+        "title": "Data Analytics",
+        "description": "Harness the power of your data with our advanced analytics and visualization tools.",
+        "icon": "chart"
+      },
+      {
+        "id": "ai-ml",
+        "title": "AI & Machine Learning",
+        "description": "Leverage cutting-edge AI technologies to gain a competitive edge in your industry.",
+        "icon": "brain"
+      }
+    ]
+  }
