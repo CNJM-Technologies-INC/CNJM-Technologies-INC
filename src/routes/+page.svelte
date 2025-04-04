@@ -6,6 +6,7 @@
 
     // Component Imports
     import Hero from '$lib/components/Hero.svelte';
+    import ProjectModal from '$lib/components/ProjectModal.svelte';
     // ProjectCard import is not used in this specific showcase implementation,
     // but kept if needed elsewhere or for future refactoring.
     // import ProjectCard from '$lib/components/ProjectCard.svelte';
@@ -13,6 +14,20 @@
     // Data Imports
     import servicesData from '$lib/data/services.json';
     import projectsData from '$lib/data/projects.json';
+
+    // --- State for Modal ---
+    let selectedProject = null; // Holds the project object for the modal
+
+    function openModal(project) {
+        // console.log("Opening modal for:", project); // Debugging log
+        selectedProject = project;
+    }
+
+    function closeModal() {
+        // console.log("Closing modal"); // Debugging log
+        selectedProject = null;
+    }
+    // --- End Modal State ---
 
     // Page State
     let mounted = false;
@@ -23,13 +38,14 @@
     // Data Processing
     const services = servicesData.services || [];
     const allProjects = projectsData.projects || [];
-    // Select projects to feature. Prioritize those with a (hypothetical) 'featured' flag,
+    // Select projects to feature. Prioritize those with a 'featured' flag,
     // otherwise take the first 6. Adjust slice as needed.
     const featuredProjects = allProjects.filter(project => project.featured === true).length > 0
                            ? allProjects.filter(project => project.featured === true)
                            : allProjects.slice(0, 6);
 
     // Create icons map for services & values
+    // Ensure these keys (code, gears, chart, brain) match the 'icon' field in your JSON data
     const icons = {
         code: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
         gears: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
@@ -43,27 +59,29 @@
             title: 'Problem Solvers',
             description: 'We focus on your unique challenges, diving deep to understand your specific needs.',
             highlight: 'unique challenges',
-            icon: 'brain' // Assigning icons to values
+            icon: 'brain' // Ensure 'brain' key exists in `icons` map
         },
         {
             title: 'Bespoke Solutions',
             description: 'We don\'t do one-size-fits-all. We craft software that exceeds expectations.',
             highlight: 'exceeds expectations',
-            icon: 'gears'
+            icon: 'gears' // Ensure 'gears' key exists in `icons` map
         },
         {
             title: 'Code with Purpose',
             description: 'Every line serves a purpose: automate, enhance productivity, drive innovation, solve real problems.',
             highlight: 'solve real problems',
-            icon: 'code'
+            icon: 'code' // Ensure 'code' key exists in `icons` map
         }
+        // Add more values if needed, ensuring 'icon' matches a key in `icons`
     ];
 
     // Intersection Observer for animation triggers
     function setupIntersectionObserver() {
         // Check if IntersectionObserver is supported and projectsContainer exists
         if (typeof IntersectionObserver === 'undefined' || !projectsContainer) {
-            isIntersecting = true; // Assume visible if not supported
+            console.warn("IntersectionObserver not supported or target element not found. Animating immediately.");
+            isIntersecting = true; // Assume visible if not supported or element missing
             return () => {}; // Return empty cleanup function
         }
 
@@ -71,19 +89,28 @@
             (entries) => {
                  // Trigger only once when it becomes intersecting
                 if (entries[0].isIntersecting && !isIntersecting) {
+                    // console.log("Projects showcase intersecting!"); // Debugging log
                     isIntersecting = true;
-                    // Optional: Disconnect observer after triggering if needed
+                    // Optional: Disconnect observer after triggering if needed for performance
                     // observer.unobserve(projectsContainer);
                 }
             },
             { threshold: 0.2 } // Trigger when 20% of the element is visible
         );
 
-        observer.observe(projectsContainer);
+        // Ensure projectsContainer is valid before observing
+        if (projectsContainer) {
+             observer.observe(projectsContainer);
+        } else {
+            console.error("Failed to find projectsContainer for IntersectionObserver.");
+            isIntersecting = true; // Fallback if element somehow doesn't bind
+        }
+
 
         // Return cleanup function
         return () => {
-            if (projectsContainer) {
+            // Ensure projectsContainer still exists on cleanup
+            if (projectsContainer && observer) {
                 observer.unobserve(projectsContainer);
             }
         };
@@ -98,15 +125,23 @@
     let observerCleanup = () => {};
     onMount(() => {
         mounted = true;
-        // Delay observer setup slightly to ensure element is rendered
-        const timer = setTimeout(() => {
-            observerCleanup = setupIntersectionObserver();
-        }, 100);
 
-        // Set initial active project if none is set
+        // Set initial active project if featured projects exist
         if (!activeProject && featuredProjects.length > 0) {
             activeProject = featuredProjects[0];
         }
+
+        // Delay observer setup slightly to ensure DOM element is ready
+        // Must happen *after* initial activeProject is set, so the element exists
+        const timer = setTimeout(() => {
+            // Need to ensure projectsContainer is bound by this time
+            if (projectsContainer) {
+                observerCleanup = setupIntersectionObserver();
+            } else {
+                console.warn("projectsContainer not bound in onMount timeout, animating immediately.");
+                isIntersecting = true; // Fallback if bind:this fails initially
+            }
+        }, 100); // Adjust delay if needed
 
         return () => {
             clearTimeout(timer);
@@ -116,9 +151,11 @@
 
     // Reactive statement to derive image URL safely
     $: displayImageUrl = (project) => {
+        // Ensure project and screenshots exist, fallback otherwise
         return project?.screenshots?.[0] || '/images/projects/placeholder.jpg'; // Fallback image
     };
     $: displayThumbnailUrl = (project) => {
+         // Ensure project and screenshots exist, fallback otherwise
          return project?.screenshots?.[0] || '/images/projects/placeholder-thumb.jpg'; // Fallback thumb
     }
 
@@ -158,25 +195,30 @@
                         <div class="project-feature-image" style="background-image: url('{displayImageUrl(activeProject)}')">
                             <div class="project-overlay">
                                 <!-- Use project.title -->
-                                <h3 class="project-name">{activeProject.title}</h3>
-                                {#if activeProject.technologies}
+                                <h3 class="project-name">{activeProject.title || 'Project Title'}</h3>
+                                {#if activeProject.technologies && activeProject.technologies.length > 0}
                                 <p class="project-tech">{activeProject.technologies.join(' • ')}</p>
+                                {:else}
+                                <p class="project-tech">Technologies not listed</p>
                                 {/if}
                             </div>
                         </div>
                         <div class="project-feature-details">
                              <!-- Use project.description -->
-                            <p class="project-description">{activeProject.description}</p>
+                            <p class="project-description">{activeProject.description || 'No description available.'}</p>
                             <div class="project-cta">
-                                <!-- Use project.id for slug -->
-                                <a href="/projects/{activeProject.id}" class="btn outline">View Details</a>
+                                <!-- **** MODAL FIX: Call openModal directly **** -->
+                                <button on:click={() => openModal(activeProject)} class="btn outline">View Details</button>
+
                                 <!-- Use project.link for demo/live URL, check validity -->
-                                {#if activeProject.link && activeProject.link !== '#'}
+                                {#if activeProject.link && activeProject.link !== '#' && activeProject.link.trim() !== ''}
                                     <a href={activeProject.link} target="_blank" rel="noopener noreferrer" class="btn primary">
-                                        {#if activeProject.link.includes('vercel.app') || activeProject.link.includes('netlify.app')}
-                                            Live Site
+                                        {#if activeProject.link.includes('vercel.app') || activeProject.link.includes('netlify.app') || activeProject.link.includes('github.io')}
+                                            Live Demo
+                                        {:else if activeProject.link.includes('github.com')}
+                                            View Code
                                         {:else}
-                                            View Link
+                                            Visit Link
                                         {/if}
                                     </a>
                                 {/if}
@@ -184,28 +226,31 @@
                         </div>
                     </div>
                 {/key}
+                {:else}
+                 <!-- Placeholder if no active project (shouldn't happen with onMount logic but safe) -->
+                 <p>Select a project thumbnail below.</p>
                 {/if}
             </div>
 
             <!-- Project Thumbnails -->
             <div class="project-thumbnails">
                 {#each featuredProjects as project, i (project.id)}
-                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions a11y_no_noninteractive_tabindex -->
+                    <!-- svelte-ignore a11y-no-noninteractive-element-interactions a11y-no-noninteractive-tabindex a11y-click-events-have-key-events -->
                     <div
                         class="project-thumb"
                         class:active={activeProject?.id === project.id}
                         on:mouseenter={() => setActiveProject(project)}
                         on:focus={() => setActiveProject(project)}
                         on:click={() => setActiveProject(project)}
-                        on:keydown={(e) => e.key === 'Enter' && setActiveProject(project)}
                         in:fly={{ y: 20, duration: 300, delay: 500 + i * 80 }}
                         tabindex="0"
                         role="button"
-                        aria-label="View details for {project.title}"
+                        aria-label="View details for {project.title || 'Unnamed Project'}"
+                        aria-pressed={activeProject?.id === project.id}
                     >
                         <div class="thumb-image" style="background-image: url('{displayThumbnailUrl(project)}')"></div>
                          <!-- Use project.title -->
-                        <span class="thumb-name">{project.title}</span>
+                        <span class="thumb-name">{project.title || 'Unnamed Project'}</span>
                     </div>
                 {/each}
             </div>
@@ -215,9 +260,9 @@
             <a href="/projects" class="btn outline large">View All Projects</a>
         </div>
     </div>
-    {/if}
+    {/if} <!-- End isIntersecting block -->
 </section>
-{/if}
+{/if} <!-- End mounted & featuredProjects check -->
 
 <!-- Services Overview Section -->
 {#if mounted}
@@ -230,19 +275,27 @@
             Crafting digital ecosystems that automate, enhance, innovate, and solve.
         </p>
 
+        {#if services.length > 0}
         <div class="services-grid">
-            {#each services as service, i}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
+            {#each services as service, i (service.title)}
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
                 <div class="service-card" in:fly={{ y: 50, duration: 500, delay: 600 + i * 100 }}>
+                    {#if icons[service.icon]}
                     <div class="service-icon"> {@html icons[service.icon]} </div>
-                    <h3 class="service-title">{service.title}</h3>
-                    <p class="service-description">{service.description}</p>
-                    <a href="/hire-us?service={encodeURIComponent(service.title)}" class="service-link">
+                    {:else}
+                    <div class="service-icon">?</div> <!-- Fallback if icon key is missing -->
+                    {/if}
+                    <h3 class="service-title">{service.title || 'Service Title'}</h3>
+                    <p class="service-description">{service.description || 'No description available.'}</p>
+                    <a href="/hire-us?service={encodeURIComponent(service.title || '')}" class="service-link">
                         Learn More <span class="arrow">→</span>
                     </a>
                 </div>
             {/each}
         </div>
+        {:else}
+         <p class="text-center text-muted">Services information is currently unavailable.</p>
+        {/if}
     </div>
 </section>
 
@@ -256,24 +309,30 @@
             We're more than just developers; we're your dedicated technology partners.
         </p>
 
+        {#if companyValues.length > 0}
         <div class="values-grid">
-            {#each companyValues as value, i}
+            {#each companyValues as value, i (value.title)}
                 <div class="value-card" in:fly={{ y: 50, duration: 500, delay: 800 + i * 100 }}>
+                    {#if icons[value.icon]}
                     <div class="value-icon">
                         {@html icons[value.icon]}
                     </div>
+                    {:else}
+                    <div class="value-icon">?</div> <!-- Fallback if icon key is missing -->
+                    {/if}
                     <div class="value-content">
-                        <h3 class="value-title">{value.title}</h3>
+                        <h3 class="value-title">{value.title || 'Company Value'}</h3>
                         <p class="value-description">
-                            {@html value.description.replace(value.highlight, `<span class="value-highlight">${value.highlight}</span>`)}
+                            {@html value.description ? value.description.replace(value.highlight, `<span class="value-highlight">${value.highlight}</span>`) : 'Description unavailable.'}
                         </p>
                     </div>
                 </div>
             {/each}
         </div>
+        {/if}
 
         <!-- Enhanced CTA within this section -->
-        <div class="cta-wrapper" in:fade={{ duration: 500, delay: 1100 }}>
+        <div class="cta-wrapper" in:fade={{ duration: 500, delay: companyValues.length > 0 ? (800 + companyValues.length * 100) : 800 }}>
             <div class="cta-content">
                 <h3 class="cta-title">Ready to transform your ideas into reality?</h3>
                 <p class="cta-description">Let's discuss how our expertise can help your business reach its full potential.</p>
@@ -286,7 +345,16 @@
         </div>
     </div>
 </section>
+{/if} <!-- End mounted check for Services/Values -->
+
+<!-- Project Modal -->
+{#if selectedProject}
+  <ProjectModal
+    project={selectedProject}
+    on:close={closeModal}
+  />
 {/if}
+
 
 <style>
     /* Base styles (Reusing from previous correct versions) */
@@ -299,16 +367,21 @@
         --dark-lighter: #2a2a2a; /* Added for card backgrounds */
         --text: #e0e0e0;
         --text-muted: #a0a0a0;
+        --border-color: #333; /* Added for consistency */
+        --shadow-color-light: rgba(0, 0, 0, 0.2);
+        --shadow-color-medium: rgba(0, 0, 0, 0.3);
+        --shadow-color-strong: rgba(0, 0, 0, 0.4);
     }
 
     .content-section {
-        padding: 6rem 0;
+        padding: clamp(4rem, 8vw, 6rem) 0; /* Responsive padding */
         position: relative;
+        overflow-x: hidden; /* Prevent horizontal scroll from animations */
     }
     .section-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 0 clamp(1rem, 4vw, 2rem); /* Responsive padding */
     }
     .section-title {
         font-size: clamp(2.2rem, 5vw, 3rem);
@@ -320,8 +393,6 @@
     }
     .section-title .highlight {
         color: var(--primary);
-        position: relative; /* Needed if using pseudo-elements for underline */
-        z-index: 1;
     }
     .section-subtitle {
         font-size: clamp(1rem, 2.5vw, 1.2rem);
@@ -336,7 +407,7 @@
         margin-top: 3rem;
     }
     .btn {
-        display: inline-flex; /* Use flex for icon alignment */
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
@@ -347,26 +418,27 @@
         transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         font-size: 1rem;
         cursor: pointer;
-        border: none;
-        line-height: 1.2; /* Ensure consistent line height */
+        border: 2px solid transparent; /* Base border */
+        line-height: 1.2;
+        white-space: nowrap; /* Prevent text wrapping */
     }
-    .btn.primary { background-color: var(--primary); color: white; }
-    .btn.primary:hover { background-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3); }
-    .btn.outline { border: 2px solid var(--primary); color: var(--primary); background-color: transparent; }
+    .btn.primary { background-color: var(--primary); color: white; border-color: var(--primary); }
+    .btn.primary:hover { background-color: var(--primary-light); border-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3); }
+    .btn.outline { border-color: var(--primary); color: var(--primary); background-color: transparent; }
     .btn.outline:hover { background-color: var(--primary-transparent); transform: translateY(-2px); }
-    .btn.text { background: transparent; color: var(--text-muted); text-decoration: none; padding: 0.8rem 1rem; font-weight: 500; }
+    .btn.text { background: transparent; color: var(--text-muted); text-decoration: none; padding: 0.8rem 1rem; font-weight: 500; border: none; }
     .btn.text:hover { color: var(--primary); }
     .btn.large { padding: 1rem 2.5rem; font-size: 1.1rem; }
 
     /* Section Backgrounds & Borders */
-    .projects-showcase { background-color: var(--dark); overflow: hidden; position: relative; }
-    .projects-showcase::before { /* Top border gradient */
+    .projects-showcase { background-color: var(--dark); overflow: visible; position: relative; } /* Allow overflow for hover effects */
+    .projects-showcase::before {
         content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
         background: linear-gradient(90deg, transparent, var(--primary-transparent), transparent);
     }
     .services-overview { background-color: var(--dark-light); position: relative; }
     .company-values { background-color: var(--dark); position: relative; }
-    .company-values::after { /* Bottom border gradient */
+    .company-values::after {
          content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
          background: linear-gradient(90deg, transparent, var(--primary-transparent), transparent);
     }
@@ -376,67 +448,80 @@
     .project-showcase-container {
         display: flex;
         flex-direction: column;
-        max-width: 1100px; /* Slightly reduced max-width for this section */
-        margin: 0 auto 3rem auto; /* Bottom margin before CTA */
-        padding: 0; /* Container padding handled by section-container */
+        max-width: 1100px;
+        margin: 0 auto 3rem auto;
+        padding: 0;
     }
 
     .project-feature {
-        margin-bottom: 2.5rem; /* Increased space */
-        border-radius: 12px; /* Consistent radius */
+        margin-bottom: 2.5rem;
+        border-radius: 12px;
         overflow: hidden;
         background: var(--dark-lighter);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); /* Softer shadow */
-        border: 1px solid #2a2a2a; /* Subtle border */
+        box-shadow: 0 15px 35px var(--shadow-color-medium);
+        border: 1px solid var(--border-color);
+        display: flex; /* Use flex here for direct children */
+        min-height: 350px; /* Ensure minimum height */
     }
 
     .project-feature-content {
-        display: flex; /* Side-by-side layout */
-        flex-direction: row; /* Ensure horizontal layout */
-        min-height: 350px; /* Minimum height */
+        /* This inner div might not be strictly needed if .project-feature is flex */
+        /* Kept for transition keying */
+        display: flex;
+        flex-direction: row; /* Default side-by-side */
+        width: 100%; /* Take full width of parent */
     }
 
     .project-feature-image {
-        flex: 1 1 55%; /* Image takes slightly more space */
+        flex: 1 1 55%;
         background-size: cover;
-        background-position: center center; /* Default center */
+        background-position: center;
         position: relative;
-        min-height: 300px; /* Min height for image area */
-        transition: background-position 0.5s ease-out; /* Smooth pan effect */
+        min-height: 300px;
+        transition: background-position 0.5s ease-out, transform 0.4s ease; /* Added transform transition */
     }
-    /* Example hover effect (optional pan) */
-    /* .project-feature-image:hover { background-position: center 40%; } */
+    .project-feature:hover .project-feature-image {
+        /* Optional: Slight zoom on container hover */
+        /* transform: scale(1.02); */
+    }
 
-
-    .project-overlay { /* Keep overlay */
+    .project-overlay {
         position: absolute; bottom: 0; left: 0; right: 0;
         background: linear-gradient(to top, rgba(18, 18, 18, 0.95) 0%, rgba(18, 18, 18, 0.7) 50%, transparent 100%);
-        padding: 1.5rem 2rem; color: white;
+        padding: clamp(1rem, 3vw, 1.5rem) clamp(1.5rem, 4vw, 2rem); /* Responsive padding */
+        color: white;
     }
 
     .project-name {
         font-size: clamp(1.5rem, 3vw, 2rem);
         font-weight: 700; margin: 0 0 0.5rem 0;
         line-height: 1.2;
+        color: white; /* Explicitly set color */
     }
 
     .project-tech {
-        font-size: 0.9rem; opacity: 0.8; margin: 0;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Prevent long tech lists breaking layout */
+        font-size: clamp(0.8rem, 2vw, 0.9rem); opacity: 0.8; margin: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         max-width: 90%;
+        color: var(--text-muted); /* Use muted text color */
     }
 
     .project-feature-details {
-        flex: 1 1 45%; /* Details take remaining space */
-        padding: 2rem 2.5rem; /* More padding */
+        flex: 1 1 45%;
+        padding: clamp(1.5rem, 4vw, 2.5rem); /* Responsive padding */
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Center content vertically */
+        justify-content: center;
     }
 
     .project-description {
-        font-size: 1.05rem; line-height: 1.7; color: var(--text-muted);
-        margin: 0 0 2rem 0; /* Increased bottom margin */
+        font-size: clamp(0.95rem, 2.2vw, 1.05rem); line-height: 1.7; color: var(--text-muted);
+        margin: 0 0 clamp(1.5rem, 4vw, 2rem) 0; /* Responsive margin */
+        /* Limit lines for consistency if needed */
+         /* display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden; */
     }
 
     .project-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
@@ -444,35 +529,43 @@
     /* Thumbnails */
     .project-thumbnails {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjust minmax */
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Adjusted minmax */
         gap: 1rem;
-        margin-bottom: 3rem; /* Space before main CTA */
+        margin-bottom: 3rem;
     }
 
     .project-thumb {
         position: relative; cursor: pointer; border-radius: 8px;
         overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
         background-color: var(--dark-lighter);
-        border: 1px solid #333; /* Border for definition */
+        border: 1px solid var(--border-color);
+        outline: none; /* Remove default focus outline if using custom */
+    }
+     /* Custom focus state */
+    .project-thumb:focus-visible {
+        box-shadow: 0 0 0 3px var(--primary-transparent); /* Outline using shadow */
     }
 
     .project-thumb:hover {
-        transform: scale(1.05) translateY(-3px); /* Scale up slightly */
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05) translateY(-3px);
+        box-shadow: 0 6px 15px var(--shadow-color-medium);
     }
 
-    /* Active state indicator */
-     .project-thumb::before {
+    .project-thumb::before {
          content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-         border: 2px solid transparent; border-radius: 8px;
+         border: 2px solid transparent; border-radius: 8px; /* Match parent border-radius */
          transition: border-color 0.3s ease;
-         pointer-events: none; /* Don't interfere with clicks */
+         pointer-events: none;
+         box-sizing: border-box; /* Include border in element size */
      }
      .project-thumb.active::before { border-color: var(--primary); }
+     .project-thumb.active {
+         box-shadow: 0 4px 12px var(--shadow-color-light); /* Subtle shadow for active */
+     }
 
 
     .thumb-image {
-        height: 110px; /* Adjust height */
+        height: 110px;
         background-size: cover; background-position: center;
         transition: transform 0.3s ease;
     }
@@ -480,8 +573,9 @@
 
     .thumb-name {
         display: block; padding: 0.75rem; font-size: 0.85rem; font-weight: 500;
-        color: var(--text-muted); text-align: center; /* Center text */
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Prevent long names */
+        color: var(--text-muted); text-align: center;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        transition: color 0.3s ease, font-weight 0.3s ease;
     }
      .project-thumb.active .thumb-name { color: var(--primary); font-weight: 600; }
     /* ---- End Project Showcase Styles ---- */
@@ -490,36 +584,40 @@
     /* ---- Services Grid Styles ---- */
     .services-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly larger min */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 2rem;
     }
 
     .service-card {
-        background-color: var(--dark); /* Contrast with section bg */
+        background-color: var(--dark);
         padding: 2.5rem 2rem;
         border-radius: 12px;
-        border: 1px solid #2a2a2a;
+        border: 1px solid var(--border-color);
         transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         display: flex; flex-direction: column;
         position: relative; overflow: hidden;
     }
 
-    /* Vertical line hover effect */
     .service-card::before {
         content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 0;
         background-color: var(--primary); transition: height 0.4s ease;
     }
     .service-card:hover::before { height: 100%; }
-    .service-card:hover{ transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border-color: #333; } /* Slight border change */
+    .service-card:hover{ transform: translateY(-10px); box-shadow: 0 15px 30px var(--shadow-color-medium); border-color: #444; } /* Darker border on hover */
 
     .service-icon {
         color: var(--primary); margin-bottom: 1.5rem; background-color: var(--primary-transparent);
-        width: 55px; height: 55px; border-radius: 12px; /* Match card radius */
+        width: 55px; height: 55px; border-radius: 12px;
         display: flex; align-items: center; justify-content: center;
         transition: transform 0.3s ease;
+        flex-shrink: 0; /* Prevent icon shrinking */
     }
-    .service-card:hover .service-icon { transform: scale(1.1) rotate(-5deg); } /* Icon effect */
+    .service-card:hover .service-icon { transform: scale(1.1) rotate(-5deg); }
     .service-icon :global(svg) { width: 28px; height: 28px; }
+    /* Fallback style for missing icon */
+    .service-icon:not(:has(svg)) {
+        font-size: 1.5rem; font-weight: bold;
+    }
 
     .service-title { font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; }
     .service-description { font-size: 1rem; color: var(--text-muted); line-height: 1.7; flex-grow: 1; margin-bottom: 1.5rem; }
@@ -533,83 +631,84 @@
     /* ---- Company Values / Why Us Styles ---- */
     .values-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust as needed */
-        gap: 2rem; /* Consistent gap */
-        margin-bottom: 4rem; /* Space before CTA wrapper */
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
     }
 
     .value-card {
         display: flex; align-items: flex-start; gap: 1.5rem;
         padding: 2rem; border-radius: 12px;
-        background-color: var(--dark-lighter); /* Contrast with section */
-        border: 1px solid #2a2a2a;
+        background-color: var(--dark-lighter);
+        border: 1px solid var(--border-color);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .value-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+    .value-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color-light); }
 
     .value-icon {
-        flex-shrink: 0; width: 50px; height: 50px; border-radius: 8px; /* Squarish */
+        flex-shrink: 0; width: 50px; height: 50px; border-radius: 8px;
         background-color: var(--primary-transparent);
         display: flex; align-items: center; justify-content: center;
         color: var(--primary);
     }
-    .value-icon :global(svg) { width: 26px; height: 26px; } /* Icon size */
+    .value-icon :global(svg) { width: 26px; height: 26px; }
+     /* Fallback style for missing icon */
+    .value-icon:not(:has(svg)) {
+        font-size: 1.5rem; font-weight: bold;
+    }
 
     .value-content { flex-grow: 1; }
-    .value-title { font-size: 1.3rem; font-weight: 600; color: var(--text); margin: 0 0 0.75rem 0; } /* Adjusted margin */
+    .value-title { font-size: 1.3rem; font-weight: 600; color: var(--text); margin: 0 0 0.75rem 0; }
     .value-description { font-size: 1rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
     .value-description :global(.value-highlight) { color: var(--primary); font-weight: 500; }
 
     /* Enhanced CTA Wrapper */
     .cta-wrapper {
-        background-color: var(--dark-lighter); border-radius: 12px; padding: 2.5rem 3rem; /* Adjusted padding */
+        background-color: var(--dark-lighter); border-radius: 12px; padding: clamp(2rem, 5vw, 3rem); /* Responsive padding */
         display: flex; justify-content: space-between; align-items: center;
-        position: relative; overflow: hidden; border: 1px solid #333;
-        margin-top: 2rem; /* Space above CTA */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        gap: 2rem; /* Gap between content and buttons */
+        position: relative; overflow: hidden; border: 1px solid var(--border-color);
+        margin-top: 2rem;
     }
-    .cta-wrapper::before { /* Top border gradient */
+    .cta-wrapper::before {
          content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
          background: linear-gradient(90deg, transparent, var(--primary), transparent);
     }
 
-    .cta-content { max-width: 65%; } /* Adjust width split */
-    .cta-title { font-size: 1.6rem; font-weight: 600; color: var(--text); margin: 0 0 0.75rem 0; line-height: 1.3; }
-    .cta-description { font-size: 1rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
-    .cta-buttons { display: flex; flex-direction: row; gap: 1rem; align-items: center; flex-shrink: 0; } /* Horizontal buttons */
+    .cta-content { flex: 1 1 50%; min-width: 280px; } /* Allow shrinking but set a min-width */
+    .cta-title { font-size: clamp(1.3rem, 4vw, 1.6rem); font-weight: 600; color: var(--text); margin: 0 0 0.75rem 0; line-height: 1.3; }
+    .cta-description { font-size: clamp(0.9rem, 2.5vw, 1rem); color: var(--text-muted); margin: 0; line-height: 1.6; }
+    .cta-buttons { display: flex; flex-direction: row; gap: 1rem; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: center; } /* Allow button wrapping */
     /* ---- End Company Values / Why Us Styles ---- */
 
 
     /* ---- Responsive Styles ---- */
     @media (max-width: 992px) { /* Tablet */
+        .project-feature { flex-direction: column; } /* Stack feature image and details */
         .project-feature-content { flex-direction: column; }
         .project-feature-image { flex: auto; height: 300px; } /* Reset flex basis */
-        .project-feature-details { flex: auto; padding: 2rem; } /* Reset flex basis */
-        .cta-wrapper { flex-direction: column; text-align: center; padding: 2.5rem 2rem; }
-        .cta-content { max-width: 100%; margin-bottom: 2rem; }
-        .cta-buttons { align-items: center; flex-direction: column; width: 100%; } /* Stack buttons */
-        .cta-buttons .btn { width: auto; min-width: 200px; } /* Give buttons reasonable width */
-        .values-grid { grid-template-columns: 1fr; } /* Stack values on tablet */
+        .project-feature-details { flex: auto; } /* Reset flex basis */
+
+        .cta-wrapper { text-align: center; }
+        .cta-content { flex-basis: 100%; } /* Take full width */
+        .cta-buttons { justify-content: center; width: 100%; } /* Center buttons */
+        .values-grid { grid-template-columns: 1fr; } /* Stack values */
     }
 
     @media (max-width: 768px) { /* Mobile */
-        .content-section { padding: 4rem 0; }
-        .section-container { padding: 0 1rem; }
         .section-title { font-size: 2rem; }
         .section-subtitle { font-size: 1rem; margin-bottom: 3rem; }
-        .project-showcase-container { padding: 0; } /* No padding needed inside section container */
         .project-feature-image { height: 250px; }
-        .project-feature-details { padding: 1.5rem; }
-        .project-name { font-size: 1.5rem; }
-        .project-description { font-size: 1rem; }
-        .project-thumbnails { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem;} /* Smaller thumbs */
+        .project-thumbnails { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem;}
         .thumb-image { height: 90px; }
-        .services-grid { grid-template-columns: 1fr; gap: 1.5rem; } /* Stack services */
+        .services-grid { grid-template-columns: 1fr; gap: 1.5rem; }
         .service-card { padding: 2rem 1.5rem; }
         .values-grid { gap: 1.5rem; }
-        .value-card { padding: 1.5rem; }
-        .cta-title { font-size: 1.4rem; }
-        .cta-description { font-size: 0.95rem; }
-        .cta-buttons .btn { width: 100%; } /* Full width buttons */
+        .value-card { flex-direction: column; text-align: center; align-items: center; padding: 1.5rem; } /* Stack icon and text */
+        .value-icon { margin-bottom: 1rem; }
+        .cta-buttons { flex-direction: column; width: 100%; } /* Stack buttons */
+        .cta-buttons .btn { width: auto; min-width: 200px; }
     }
 
     @media (max-width: 576px) { /* Small Mobile */
@@ -617,10 +716,15 @@
         .btn.large { padding: 0.9rem 2rem; font-size: 1rem; }
         .project-feature-details { padding: 1.5rem 1rem; }
         .project-overlay { padding: 1rem 1.5rem; }
-        .project-cta { flex-direction: column; align-items: stretch; } /* Stack CTA buttons */
+        .project-cta { flex-direction: column; align-items: stretch; gap: 0.75rem; } /* Stack CTA buttons tightly */
         .project-cta .btn { text-align: center; }
-        .project-thumbnails { grid-template-columns: repeat(2, 1fr); } /* 2 thumbs per row */
-        .thumb-image { height: 80px; }
+        .project-thumbnails { grid-template-columns: repeat(2, 1fr); }
+        .thumb-image { height: 100px; } /* Slightly taller thumb */
+         .cta-buttons .btn { width: 100%; min-width: unset;} /* Full width buttons */
     }
+
+    /* Utility class for simple text centering */
+    .text-center { text-align: center; }
+    .text-muted { color: var(--text-muted); }
 
 </style>

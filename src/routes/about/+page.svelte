@@ -20,21 +20,22 @@
             bio: "With over 4 years of experience in software development, James founded CNJM Tech with a vision to create meaningful software solutions that solve real business problems.",
             imageUrl: "/images/team/James.jpg",
             socialLinks: {
-                linkedin: "https://linkedin.com/in/chrisjohnson",
-                github: "https://github.com/chrisjohnson",
-                twitter: "https://twitter.com/chrisjohnson"
+                linkedin: "https://linkedin.com/in/CamreshJames",
+                github: "https://github.com/CamreshJames",
+                twitter: "https://twitter.com/CamreshJames",
+                dribbble: "https://james-mwangi-njenga.vercel.app/"
             }
-        }
-        // {
-        //     name: "Natalie Wong",
-        //     role: "UX/UI Designer",
-        //     bio: "Natalie brings 8 years of design expertise to every project, ensuring our solutions are not just functional but also intuitive and delightful to use.",
-        //     imageUrl: "/images/team/natalie.jpg",
-        //     socialLinks: {
-        //         linkedin: "https://linkedin.com/in/nataliewong",
-        //         dribbble: "https://dribbble.com/nataliewong"
-        //     }
-        // },
+        },
+        {
+            name: "Francis Ng'ang'a",
+            role: "Mobile Developer",
+            bio: "Francis brings 3 years of Mobile Development experience, ensuring our solutions are not just functional but also intuitive and delightful to use.",
+            imageUrl: "/images/team/francis.jpg",
+            socialLinks: {
+                github: "http://Github.com/freminoxa",
+                twitter: "https://x.com/Frank5149170005?t=w3FpxdgYHYlxW26rMI0HjA&s=09"
+            }
+        },
         // {
         //     name: "Michael Chen",
         //     role: "Backend Developer",
