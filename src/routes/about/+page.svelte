@@ -105,9 +105,9 @@
     // Company Stats
     const companyStats = [
         { number: "50+", label: "Completed Projects" },
-        { number: "32", label: "Happy Clients" },
-        { number: "8", label: "Team Members" },
-        { number: "96%", label: "Client Retention" }
+        { number: "15", label: "Happy Clients" },
+        { number: "5", label: "Team Members" },
+        { number: "100%", label: "Client Retention" }
     ];
 
     // Social media icon SVGs
@@ -503,9 +503,11 @@
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     }
     .team-photo {
-        height: 200px;
-        background-size: cover;
+        height: 250px;
+        background-size: auto 250px;
         background-position: center;
+        background-repeat: no-repeat;
+        background-color: #000;
     }
     .team-info {
         padding: 1.5rem;
