@@ -196,11 +196,11 @@
           {
             "type": "list",
             "items": [
-              "**Physical Space:** Ergonomics, lighting, minimizing distractions, maybe even plants or personalized decor.",
-              "**Digital Space:** Clean desktop, well-organized project structure, personalized editor themes and fonts.",
-              "**Auditory:** Silence, background music (what genre?), noise-canceling headphones.",
-              "**Workflow:** Time blocking (Pomodoro technique), minimizing context switching, automating repetitive tasks.",
-              "**Mindset:** Entering a 'flow state', managing stress, taking regular breaks."
+              "Physical Space: Ergonomics, lighting, minimizing distractions, maybe even plants or personalized decor.",
+              "Digital Space: Clean desktop, well-organized project structure, personalized editor themes and fonts.",
+              "Auditory: Silence, background music (what genre?), noise-canceling headphones.",
+              "Workflow: Time blocking (Pomodoro technique), minimizing context switching, automating repetitive tasks.",
+              "Mindset: Entering a 'flow state', managing stress, taking regular breaks."
             ]
           },
            {
