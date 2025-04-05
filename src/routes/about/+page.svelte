@@ -28,7 +28,7 @@
         },
         {
             name: "Francis Ng'ang'a",
-            role: "Mobile Developer",
+            role: "Mobile App Developer",
             bio: "Francis brings 3 years of Mobile Development experience, ensuring our solutions are not just functional but also intuitive and delightful to use.",
             imageUrl: "/images/team/francis.jpg",
             socialLinks: {
