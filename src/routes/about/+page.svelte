@@ -167,7 +167,7 @@
             <div class="overview-text" in:fly={{ x: -30, duration: 500, delay: 500 }}>
                 <h2 class="section-title">Our <span class="highlight">Story</span></h2>
                 <p class="overview-paragraph">
-                    Founded in 2018, CNJM Technologies emerged from a simple belief: software should solve real problems, not create new ones. We've grown from a small team of passionate developers into a full-service digital solutions provider, but our core mission remains unchanged.
+                    Founded in 2024, CNJM Technologies emerged from a simple belief: software should solve real problems, not create new ones. We've grown from a small team of passionate developers into a full-service digital solutions provider, but our core mission remains unchanged.
                 </p>
                 <p class="overview-paragraph">
                     We specialize in creating custom software solutions that automate processes, enhance productivity, and drive innovation. Our approach is deeply collaborative – we don't just build what we think you need; we listen, understand, and then craft solutions that address your specific challenges.
