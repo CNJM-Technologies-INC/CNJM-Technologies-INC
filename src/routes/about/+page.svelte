@@ -33,7 +33,8 @@
             imageUrl: "/images/team/francis.jpg",
             socialLinks: {
                 github: "http://Github.com/freminoxa",
-                twitter: "https://x.com/Frank5149170005?t=w3FpxdgYHYlxW26rMI0HjA&s=09"
+                twitter: "https://x.com/Frank5149170005?t=w3FpxdgYHYlxW26rMI0HjA&s=09",
+                dribbble: "https://ngangafrancis.netlify.app/"
             }
         },
         // {
@@ -502,7 +503,7 @@
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     }
     .team-photo {
-        height: 250px;
+        height: 200px;
         background-size: cover;
         background-position: center;
     }

@@ -482,7 +482,7 @@
     }
     .project-feature:hover .project-feature-image {
         /* Optional: Slight zoom on container hover */
-        /* transform: scale(1.02); */
+        transform: scale(1.02);
     }
 
     .project-overlay {
