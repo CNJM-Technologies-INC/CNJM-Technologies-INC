@@ -11,10 +11,6 @@
   </script>
   
   <section class="hero">
-    <div class="hero-visual">
-      <ThreeDScene />
-    </div>
-    
     <div class="hero-content">
       {#if loaded}
         <h1 in:fly={{ y: 50, duration: 800, delay: 200 }}>
@@ -28,6 +24,9 @@
           <a href="/blog" class="btn outline">Read Our Blog</a>
         </div>
       {/if}
+    </div>
+    <div class="hero-visual">
+      <ThreeDScene />
     </div>
     
     <div class="hero-scroll" in:fade={{ delay: 1200, duration: 800 }}>
