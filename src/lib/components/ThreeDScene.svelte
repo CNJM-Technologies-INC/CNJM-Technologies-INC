@@ -65,10 +65,10 @@
       // Create main geometry
       geometry = new THREE.IcosahedronGeometry(8, 1);
       material = new THREE.MeshPhongMaterial({
-        color: 0xff6b00,
+        color: 0xeeff,
         wireframe: true,
-        transparent: true,
-        opacity: 0.8
+        transparent: false,
+        opacity: 1
       });
       mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
