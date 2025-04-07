@@ -43,9 +43,9 @@
             bio: "Henry brings over 4 years of expertise in crafting exceptional user experiences. He bridges the gap between design aesthetics and functional development, ensuring intuitive and engaging interfaces.",
             imageUrl: "/images/team/henry.png",
             socialLinks: {
-                linkedin: "HenchaDev", 
-                github: "HenchaDev",   
-                twitter: "mac_henry_03",  
+                linkedin: "https://www.linkedin.com/in/henchadev/", 
+                github: "http://Github.com/HenchaDev",   
+                twitter: "https://x.com/mac_henry_03",  
                 dribbble: "https://henry-portfolio-five.vercel.app/"  
             }
         },
