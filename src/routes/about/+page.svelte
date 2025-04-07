@@ -30,32 +30,34 @@
             name: "Francis Ng'ang'a",
             role: "Mobile App Developer",
             bio: "Francis brings 3 years of Mobile Development experience, ensuring our solutions are not just functional but also intuitive and delightful to use.",
-            imageUrl: "/images/team/francis.jpg",
+            imageUrl: "/images/team/francis.jpg", 
             socialLinks: {
                 github: "http://Github.com/freminoxa",
                 twitter: "https://x.com/Frank5149170005?t=w3FpxdgYHYlxW26rMI0HjA&s=09",
                 dribbble: "https://ngangafrancis.netlify.app/"
             }
         },
-        // {
-        //     name: "Michael Chen",
-        //     role: "Backend Developer",
-        //     bio: "Specializing in scalable architecture and database optimization, Michael ensures our solutions are built on solid, future-proof foundations.",
-        //     imageUrl: "/images/team/michael.jpg",
-        //     socialLinks: {
-        //         linkedin: "https://linkedin.com/in/michaelchen",
-        //         github: "https://github.com/michaelchen"
-        //     }
-        // },
-        // {
-        //     name: "Julia Rodriguez",
-        //     role: "Project Manager",
-        //     bio: "Julia's methodical approach to project management ensures we deliver on time and on budget while maintaining open communication with clients throughout.",
-        //     imageUrl: "/images/team/julia.jpg",
-        //     socialLinks: {
-        //         linkedin: "https://linkedin.com/in/juliarodriguez"
-        //     }
-        // }
+        {
+            name: "Henry Mwangi Chege (Hencha Edits)",
+            role: "UX/UI Designer & Developer",
+            bio: "Henry brings over 4 years of expertise in crafting exceptional user experiences. He bridges the gap between design aesthetics and functional development, ensuring intuitive and engaging interfaces.",
+            imageUrl: "/images/team/henry.png",
+            socialLinks: {
+                linkedin: "HenchaDev", 
+                github: "HenchaDev",   
+                twitter: "mac_henry_03",  
+                dribbble: "https://henry-portfolio-five.vercel.app/"  
+            }
+        },
+        {
+            name: "Joseph Macharia Kariuki",
+            role: "Hardware & Network Specialist",
+            bio: "With over 5 years in the field, Joseph is our master troubleshooter and hardware expert. He ensures our infrastructure, servers, and networks run smoothly and efficiently.",
+            imageUrl: "/images/team/joseph.png", 
+            socialLinks: {
+                dribbble: "https://joseph-macharia-kariuki.vercel.app/", 
+            }
+        }
     ];
 
     // Timeline Data
