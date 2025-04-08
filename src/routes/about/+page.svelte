@@ -41,7 +41,7 @@
             name: "Henry Mwangi Chege (Hencha Edits)",
             role: "UX/UI Designer & Developer",
             bio: "Henry brings over 4 years of expertise in crafting exceptional user experiences. He bridges the gap between design aesthetics and functional development, ensuring intuitive and engaging interfaces.",
-            imageUrl: "/images/team/henry.png",
+            imageUrl: "/images/team/henry.jpg",
             socialLinks: {
                 linkedin: "https://www.linkedin.com/in/henchadev/", 
                 github: "http://Github.com/HenchaDev",   

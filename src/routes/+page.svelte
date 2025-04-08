@@ -162,8 +162,15 @@
 </script>
 
 <svelte:head>
-  <title>CNJM Technologies Inc. - Innovative Software Solutions</title>
-  <meta name="description" content="CNJM Technologies Inc. creates elegant code solutions that drive innovation, enhance productivity, and solve real-world problems. Explore our services and projects.">
+  <title>CNJM Technologies Inc. - Custom Software & AI Solutions</title>
+  <meta name="description" content="CNJM Technologies Inc. offers expert custom software development, process automation, AI integration, and data analytics services to elevate your business." />
+  <link rel="canonical" href="https://cnjm-technologies-inc.vercel.app/" /> 
+  <meta property="og:title" content="CNJM Technologies Inc. - Custom Software & AI Solutions" />
+  <meta property="og:description" content="Expert custom software development, process automation, AI integration, and data analytics services." />
+  <meta property="og:url" content="https://cnjm-technologies-inc.vercel.app/" />
+  <meta property="og:image" content="https://cnjm-technologies-inc.vercel.app%sveltekit.assets%/images/og-image.jpg" /> 
+  <meta name="twitter:title" content="CNJM Technologies Inc. - Custom Software & AI Solutions" />
+  <meta name="twitter:description" content="Expert custom software development, process automation, AI integration, and data analytics services." />
 </svelte:head>
 
 <!-- Hero Section -->
