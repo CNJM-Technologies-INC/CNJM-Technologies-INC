@@ -63,12 +63,12 @@
     // Timeline Data
     const companyTimeline = [
         {
-            year: "June 2014",
+            year: "June 2024",
             title: "Foundation",
             description: "CNJM Technologies was founded with the mission to develop innovative software solutions for businesses of all sizes."
         },
         {
-            year: "August 2014",
+            year: "August 2024",
             title: "First Major Client",
             description: "Secured our first enterprise client and delivered a comprehensive inventory management system that increased efficiency by 40%."
         },
